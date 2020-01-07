@@ -14,6 +14,8 @@ namespace WebOcr.Controllers
     [ApiController]
     public class OcrController : ControllerBase
     {
+        private static TesseractEngine lstmEngine = new TesseractEngine(@"./tessdata_normal", "deu", EngineMode.LstmOnly);
+        private static TesseractEngine tesEngine = new TesseractEngine(@"./tessdata_normal", "deu", EngineMode.TesseractOnly);
         // GET api/values
         [HttpPost]
         public async Task<IActionResult> Base64Tiff()
@@ -32,21 +34,18 @@ namespace WebOcr.Controllers
             try
             {
                 byte[] bytes = Convert.FromBase64String(base64);
-                Console.WriteLine($"Convert from base64: {sw.ElapsedMilliseconds}ms");
-                sw.Restart();
-                var engine = new TesseractEngine(@"./tessdata", "deu", EngineMode.LstmOnly);
-                Console.WriteLine($"Create tess engine: {sw.ElapsedMilliseconds}ms");
-                sw.Restart();
                 var img = Pix.LoadTiffFromMemory(bytes);
-                Console.WriteLine($"LoadTiffFromMemory: {sw.ElapsedMilliseconds}ms");
                 sw.Restart();
-                var page = engine.Process(img, PageSegMode.AutoOsd);
-                Console.WriteLine($"Process page: {sw.ElapsedMilliseconds}ms");
+                var lstmPage = lstmEngine.Process(img);
+                String lstmText = lstmPage.GetText();
+                Console.WriteLine($"lstm engine: {sw.ElapsedMilliseconds}ms");
+                lstmPage.Dispose();
                 sw.Restart();
-                String text = page.GetText();
-                Console.WriteLine($"GetText: {sw.ElapsedMilliseconds}ms");
-                sw.Restart();
-                return Content(text, "plain/text");
+                var tesPage = tesEngine.Process(img);
+                var testText = tesPage.GetText();
+                Console.WriteLine($"tesEngine: {sw.ElapsedMilliseconds}ms");
+                tesPage.Dispose();
+                return Content(testText, "plain/text");
             }
             catch(Exception ex)
             {
