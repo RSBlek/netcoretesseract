@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -17,21 +18,34 @@ namespace WebOcr.Controllers
         [HttpPost]
         public async Task<IActionResult> Base64Tiff()
         {
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
             String base64;
             using (StreamReader reader = new StreamReader(Request.Body, Encoding.UTF8))
             {
                 base64 = await reader.ReadToEndAsync();
             }
+            Console.WriteLine($"Reading body: {sw.ElapsedMilliseconds}ms");
+            sw.Restart();
             if (base64.Length == 0)
                 return BadRequest();
             try
             {
-                Console.WriteLine(base64);
                 byte[] bytes = Convert.FromBase64String(base64);
-                var engine = new TesseractEngine(@"./tessdata", "deu", EngineMode.TesseractAndCube);
+                Console.WriteLine($"Convert from base64: {sw.ElapsedMilliseconds}ms");
+                sw.Restart();
+                var engine = new TesseractEngine(@"./tessdata", "deu", EngineMode.LstmOnly);
+                Console.WriteLine($"Create tess engine: {sw.ElapsedMilliseconds}ms");
+                sw.Restart();
                 var img = Pix.LoadTiffFromMemory(bytes);
+                Console.WriteLine($"LoadTiffFromMemory: {sw.ElapsedMilliseconds}ms");
+                sw.Restart();
                 var page = engine.Process(img, PageSegMode.AutoOsd);
+                Console.WriteLine($"Process page: {sw.ElapsedMilliseconds}ms");
+                sw.Restart();
                 String text = page.GetText();
+                Console.WriteLine($"GetText: {sw.ElapsedMilliseconds}ms");
+                sw.Restart();
                 return Content(text, "plain/text");
             }
             catch
