@@ -1,0 +1,11 @@
+stages:
+- name: Build
+  steps:
+  - publishImageConfig:
+      dockerfilePath: ./Dockerfile
+      buildContext: .
+      tag: webtesseract:1
+      pushRemote: true
+      registry: web.corvida.eu:443
+timeout: 60
+notification: {}
