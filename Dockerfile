@@ -21,6 +21,5 @@ RUN dotnet publish "WebOcr.csproj" -c Release -o /app
 FROM base AS final
 WORKDIR /app
 ENV OMP_THREAD_LIMIT 1
-EXPORT OMP_THREAD_LIMIT
 COPY --from=publish /app .
 ENTRYPOINT ["dotnet", "WebOcr.dll"]
