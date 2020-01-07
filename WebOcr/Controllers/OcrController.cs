@@ -48,8 +48,9 @@ namespace WebOcr.Controllers
                 sw.Restart();
                 return Content(text, "plain/text");
             }
-            catch
+            catch(Exception ex)
             {
+                Console.WriteLine(ex);
                 return new StatusCodeResult(500);
             }
         }
