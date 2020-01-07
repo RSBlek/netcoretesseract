@@ -21,9 +21,6 @@
     <None Update="img.tiff">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="tessdata\configs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="tessdata\deu.traineddata">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -14,8 +14,8 @@ namespace WebOcr.Controllers
     [ApiController]
     public class OcrController : ControllerBase
     {
-        private static TesseractEngine lstmEngine = new TesseractEngine(@"./tessdata", "deu", EngineMode.LstmOnly);
-        private static TesseractEngine tesEngine = new TesseractEngine(@"./tessdata", "deu", EngineMode.TesseractOnly);
+        private static TesseractEngine fastEngine = new TesseractEngine(@"./tessdata", "deu", EngineMode.LstmOnly);
+        private static TesseractEngine normEngine = new TesseractEngine(@"./tessdata_normal", "deu", EngineMode.LstmOnly);
         // GET api/values
         [HttpPost]
         public async Task<IActionResult> Base64Tiff()
@@ -36,16 +36,16 @@ namespace WebOcr.Controllers
                 byte[] bytes = Convert.FromBase64String(base64);
                 var img = Pix.LoadTiffFromMemory(bytes);
                 sw.Restart();
-                var lstmPage = lstmEngine.Process(img);
-                String lstmText = lstmPage.GetText();
-                Console.WriteLine($"lstm engine: {sw.ElapsedMilliseconds}ms");
-                lstmPage.Dispose();
+                var fastPage = fastEngine.Process(img);
+                String fastText = fastPage.GetText();
+                Console.WriteLine($"fast engine: {sw.ElapsedMilliseconds}ms");
+                fastPage.Dispose();
                 sw.Restart();
-                var tesPage = tesEngine.Process(img);
-                var testText = tesPage.GetText();
+                var normPage = normEngine.Process(img);
+                var normText = normPage.GetText();
                 Console.WriteLine($"tesEngine: {sw.ElapsedMilliseconds}ms");
-                tesPage.Dispose();
-                return Content(testText, "plain/text");
+                normPage.Dispose();
+                return Content(normText, "plain/text");
             }
             catch(Exception ex)
             {
