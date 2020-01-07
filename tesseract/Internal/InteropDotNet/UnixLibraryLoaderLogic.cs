@@ -21,12 +21,7 @@ namespace InteropDotNet
                 if (libraryHandle != IntPtr.Zero)
                     Logger.TraceInformation("Successfully loaded native library \"{0}\", handle = {1}.", fileName, libraryHandle);
                 else
-                {
                     Logger.TraceError("Failed to load native library \"{0}\".\r\nCheck windows event log.", fileName);
-                    var err = UnixGetLastError();
-                    var errStr = Marshal.PtrToStringAnsi(err);
-                }
-                    
             }
             catch (Exception e)
             {

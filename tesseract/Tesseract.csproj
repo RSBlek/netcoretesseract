@@ -9,16 +9,16 @@
     <Authors>Charles Weld</Authors>
     <Company />
     <Product>Tesseract</Product>
-    <Description>Tesseract is probably the most accurate open source OCR engine available. Combined with the Leptonica Image Processing Library it can read a wide variety of image formats and convert them to text in over 60 languages. It was one of the top 3 engines in the 1995 UNLV Accuracy test. Between 1995 and 2006 it had little work done on it, but since then it has been improved extensively by Google. It is released under the Apache License 2.0.</Description>
-    <Copyright>Copyright 2012-2018 Charles Weld</Copyright>
+    <Description>Tesseract 4 adds a new neural net (LSTM) based OCR engine which is focused on line recognition, but also still supports the legacy Tesseract OCR engine of Tesseract 3 which works by recognizing character patterns. Compatibility with Tesseract 3 is enabled by using the Legacy OCR Engine mode (--oem 0). It also needs traineddata files which support the legacy engine, for example those from the tessdata repository.</Description>
+    <Copyright>Copyright 2012-2019 Charles Weld</Copyright>
     <PackageReleaseNotes>https://github.com/charlesw/tesseract/blob/master/ChangeLog.md</PackageReleaseNotes>
     <PackageProjectUrl>https://github.com/charlesw/tesseract/</PackageProjectUrl>
     <RepositoryUrl>https://github.com/charlesw/tesseract/</RepositoryUrl>
     <PackageTags>Tesseract Ocr</PackageTags>
-    <Version>3.3.0.0</Version>
-    <AssemblyVersion>3.3.0.0</AssemblyVersion>
+    <Version>4.1.0</Version>
+    <AssemblyVersion>4.1.0.0</AssemblyVersion>
     <NeutralLanguage></NeutralLanguage>
-    <PackageLicenseUrl>http://www.apache.org/licenses/LICENSE-2.0</PackageLicenseUrl>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
   </PropertyGroup>
   
   <!-- .NET 4.0 references, compilation flags and build options -->
@@ -55,34 +55,11 @@
     <Content Include="x64\*.dll" Pack="true" PackageCopyToOutput="true" PackagePath="x64">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Compile Remove="x86\**" />
-    <CSFile Remove="x86\**" />
-    <EmbeddedResource Remove="x86\**" />
-    <None Remove="x86\**" />
+    <Content Include="x86\*.dll" Pack="true" PackageCopyToOutput="true" PackagePath="x86">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Tesseract.targets" Pack="true" PackageCopyToOutput="true" PackagePath="build/">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Update="x64\liblept1780.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Update="x64\libtesseract4100.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <None Update="x64\liblept1753.so">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="x64\liblept1780.so">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="x64\libtesseract3052.so">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="x64\libtesseract410.so">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 </Project>

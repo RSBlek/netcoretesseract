@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-
+using Tesseract;
 using Tesseract.Internal;
 
 namespace InteropDotNet
@@ -148,7 +148,13 @@ namespace InteropDotNet
 
         public IntPtr GetProcAddress(IntPtr dllHandle, string name)
         {
-            return logic.GetProcAddress(dllHandle, name);
+            IntPtr procAddress = logic.GetProcAddress(dllHandle, name);
+            if(procAddress == IntPtr.Zero)
+            {
+                throw new LoadLibraryException(String.Format("Failed to load proc {0}", name));
+            }
+
+            return procAddress;
         }
 
         public bool IsLibraryLoaded(string fileName)

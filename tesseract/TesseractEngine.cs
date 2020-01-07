@@ -14,7 +14,7 @@ namespace Tesseract
     /// </summary>
     public class TesseractEngine : DisposableBase
     {
-        private const string TesseractVersion = "3.05.02";
+        private const string TesseractVersion = "4.00.00";
         private static readonly TraceSource trace = new TraceSource("Tesseract");
 
         private HandleRef handle;
@@ -374,7 +374,6 @@ namespace Tesseract
 
         private void Initialise(string datapath, string language, EngineMode engineMode, IEnumerable<string> configFiles, IDictionary<string, object> initialValues, bool setOnlyNonDebugVariables)
         {
-            const string TessDataDirectory = "tessdata";
             Guard.RequireNotNullOrEmpty("language", language);
 
             // do some minor processing on datapath to fix some common errors (this basically mirrors what tesseract does as of 3.04)
@@ -388,7 +387,6 @@ namespace Tesseract
                 {
                     datapath = datapath.Substring(0, datapath.Length - 1);
                 }
-                // remove 'tessdata', if it exists, tesseract will add it when building up the tesseract path
             }
 
             if (Interop.TessApi.BaseApiInit(handle, datapath, language, (int)engineMode, configFiles ?? new List<string>(), initialValues ?? new Dictionary<string, object>(), setOnlyNonDebugVariables) != 0)

@@ -106,6 +106,26 @@
             Gets the angle the page would need to be rotated to deskew the text block.
             </summary>
         </member>
+        <member name="F:Tesseract.EngineMode.TesseractOnly">
+            <summary>
+            Only the legacy tesseract OCR engine is used.
+            </summary>
+        </member>
+        <member name="F:Tesseract.EngineMode.LstmOnly">
+            <summary>
+            Only the new LSTM-based OCR engine is used.
+            </summary>
+        </member>
+        <member name="F:Tesseract.EngineMode.TesseractAndLstm">
+            <summary>
+            Both the legacy and new LSTM based OCR engine is used.
+            </summary>
+        </member>
+        <member name="F:Tesseract.EngineMode.Default">
+            <summary>
+            The default OCR engine is used (currently LSTM-ased OCR engine).
+            </summary>
+        </member>
         <member name="M:Tesseract.Internal.Guard.Require(System.String,System.Boolean)">
             <summary>
             Ensures the given <paramref name="condition"/> is true.
@@ -448,11 +468,6 @@
             Gets the number of bytes in a null terminated byte array.
             </summary>
         </member>
-        <member name="T:Tesseract.Interop.OSResult">
-             <summary>
-            
-             </summary>
-        </member>
         <member name="M:Tesseract.IResultRenderer.BeginDocument(System.String)">
             <summary>
             Begins a new document with the specified <paramref name="title"/>.
@@ -580,11 +595,53 @@
         </member>
         <member name="M:Tesseract.Page.GetHOCRText(System.Int32,System.Boolean)">
             <summary>
-            Gets the page's content as a HOCR text.
+            Gets the page's content as an HOCR text.
             </summary>
             <param name="pageNum">The page number (zero based).</param>
             <param name="useXHtml">True to use XHTML Output, False to HTML Output</param>
-            <returns>The OCR'd output as a HOCR text string.</returns>
+            <returns>The OCR'd output as an HOCR text string.</returns>
+        </member>
+        <member name="M:Tesseract.Page.GetAltoText(System.Int32)">
+            <summary>
+            Gets the page's content as an Alto text.
+            </summary>
+            <param name="pageNum">The page number (zero based).</param>
+            <returns>The OCR'd output as an Alto text string.</returns>
+        </member>
+        <member name="M:Tesseract.Page.GetTsvText(System.Int32)">
+            <summary>
+            Gets the page's content as a Tsv text.
+            </summary>
+            <param name="pageNum">The page number (zero based).</param>
+            <returns>The OCR'd output as a Tsv text string.</returns>
+        </member>
+        <member name="M:Tesseract.Page.GetBoxText(System.Int32)">
+            <summary>
+            Gets the page's content as a Box text.
+            </summary>
+            <param name="pageNum">The page number (zero based).</param>
+            <returns>The OCR'd output as a Box text string.</returns>
+        </member>
+        <member name="M:Tesseract.Page.GetLSTMBoxText(System.Int32)">
+            <summary>
+            Gets the page's content as a LSTMBox text.
+            </summary>
+            <param name="pageNum">The page number (zero based).</param>
+            <returns>The OCR'd output as a LSTMBox text string.</returns>
+        </member>
+        <member name="M:Tesseract.Page.GetWordStrBoxText(System.Int32)">
+            <summary>
+            Gets the page's content as a WordStrBox text.
+            </summary>
+            <param name="pageNum">The page number (zero based).</param>
+            <returns>The OCR'd output as a WordStrBox text string.</returns>
+        </member>
+        <member name="M:Tesseract.Page.GetUNLVText">
+            <summary>
+            Gets the page's content as an UNLV text.
+            </summary>
+            <param name="pageNum">The page number (zero based).</param>
+            <returns>The OCR'd output as an UNLV text string.</returns>
         </member>
         <member name="M:Tesseract.Page.GetMeanConfidence">
             <summary>
@@ -757,11 +814,7 @@
             Treat the image as a single character.
             </summary>
         </member>
-        <member name="F:Tesseract.PageSegMode.SparseText">
-            <summary>
-            Find as much text as possible in no particular order.
-            </summary>
-        </member>
+        <!-- Badly formed XML comment ignored for member "F:Tesseract.PageSegMode.SparseText" -->
         <member name="F:Tesseract.PageSegMode.SparseTextOsd">
             <summary>
             Sparse text with orientation and script detection.
@@ -769,7 +822,8 @@
         </member>
         <member name="F:Tesseract.PageSegMode.RawLine">
             <summary>
-            Treat the image as a single text line, bypassing hacks that are Tesseract-specific.
+            Treat the image as a single text line, bypassing hacks that are
+            specific to Tesseract.
             </summary>
         </member>
         <member name="F:Tesseract.PageSegMode.Count">
@@ -909,6 +963,34 @@
             See <a href="http://www.leptonica.com/line-removal.html">line-removal</a>.
             </summary>
             <returns>image with lines removed</returns>
+        </member>
+        <member name="F:Tesseract.Pix.SEL_STR2">
+            <summary>
+            HMT (with just misses) for speckle up to 2x2
+            "oooo"
+            "oC o"
+            "o  o"
+            "oooo"
+            </summary>
+        </member>
+        <member name="F:Tesseract.Pix.SEL_STR3">
+            <summary>
+            HMT (with just misses) for speckle up to 3x3
+            "oC  o"
+            "o   o"
+            "o   o"
+            "ooooo"
+            </summary>
+        </member>
+        <member name="M:Tesseract.Pix.Despeckle(System.String,System.Int32)">
+            <summary>
+            Reduces speckle noise in image. The algorithm is based on Leptonica
+            <code>speckle_reg.c</code> example demonstrating morphological method of
+            removing speckle.
+            </summary>
+            <param name="selStr">hit-miss sels in 2D layout; SEL_STR2 and SEL_STR3 are predefined values</param>
+            <param name="selSize">2 for 2x2, 3 for 3x3</param>
+            <returns></returns>
         </member>
         <member name="M:Tesseract.Pix.Deskew">
             <summary>
@@ -1413,17 +1495,18 @@
             Creates renderers for specified output formats.
             </summary>
             <param name="outputbase"></param>
-            <param name="dataPath"></param>
+            <param name="dataPath">The directory containing the pdf font data, normally same as your tessdata directory.</param>
             <param name="outputFormats"></param>
             <returns></returns>
         </member>
-        <member name="M:Tesseract.ResultRenderer.CreatePdfRenderer(System.String,System.String)">
+        <member name="M:Tesseract.ResultRenderer.CreatePdfRenderer(System.String,System.String,System.Boolean)">
             <summary>
             Creates a <see cref="T:Tesseract.IResultRenderer">result renderer</see> that render that generates a searchable
             pdf file from tesseract's output.
             </summary>
             <param name="outputFilename">The filename of the pdf file to be generated without the file extension.</param>
             <param name="fontDirectory">The directory containing the pdf font data, normally same as your tessdata directory.</param>
+            <param name="textonly">skip images if set</param>
             <returns></returns>
         </member>
         <member name="M:Tesseract.ResultRenderer.CreateTextRenderer(System.String)">

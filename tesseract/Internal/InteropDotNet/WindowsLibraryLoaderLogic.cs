@@ -20,12 +20,7 @@ namespace InteropDotNet
                 if (libraryHandle != IntPtr.Zero)
                     Logger.TraceInformation("Successfully loaded native library \"{0}\", handle = {1}.", fileName, libraryHandle);
                 else
-                {
                     Logger.TraceError("Failed to load native library \"{0}\".\r\nCheck windows event log.", fileName);
-                    var err = WindowsGetLastError();
-
-                }
-                    
             }
             catch (Exception e)
             {
@@ -64,18 +59,25 @@ namespace InteropDotNet
                     functionName, libraryHandle);
                 var functionHandle = WindowsGetProcAddress(libraryHandle, functionName);
                 if (functionHandle != IntPtr.Zero)
+                {
                     Logger.TraceInformation("Successfully loaded native function \"{0}\", function handle = {1}.",
                         functionName, functionHandle);
+                }
                 else
-                    Logger.TraceError("Failed to load native function \"{0}\", function handle = {1}",
-                        functionName, functionHandle);
+                {
+                    throw new Tesseract.LoadLibraryException(String.Format(
+                        "Failed to load native function \"{0}\" from library with handle  {1}.",
+                        functionName, libraryHandle));
+
+                }
                 return functionHandle;
             }
             catch (Exception e)
             {
                 var lastError = WindowsGetLastError();
-                Logger.TraceError("Failed to free native library with handle {0}.\r\nLast Error:{1}\r\nCheck inner exception and\\or windows event log.\r\nInner Exception: {2}", libraryHandle, lastError, e.ToString());
-                return IntPtr.Zero;
+                throw new Tesseract.LoadLibraryException(
+                    String.Format("Failed to load native function \"{0}\" from library with handle  {1}.\r\nLast Error:{1}\r\nCheck inner exception and\\or windows event log.\r\nInner Exception: {2}", functionName, libraryHandle, lastError, e.ToString()),
+                    e);
             }
         }
 
