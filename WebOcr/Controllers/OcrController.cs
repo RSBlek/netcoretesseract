@@ -14,8 +14,8 @@ namespace WebOcr.Controllers
     [ApiController]
     public class OcrController : ControllerBase
     {
-        private static TesseractEngine lstmEngine = new TesseractEngine(@"./tessdata_normal", "deu", EngineMode.LstmOnly);
-        private static TesseractEngine tesEngine = new TesseractEngine(@"./tessdata_normal", "deu", EngineMode.TesseractOnly);
+        private static TesseractEngine lstmEngine = new TesseractEngine(@"./tessdata", "deu", EngineMode.LstmOnly);
+        private static TesseractEngine tesEngine = new TesseractEngine(@"./tessdata", "deu", EngineMode.TesseractOnly);
         // GET api/values
         [HttpPost]
         public async Task<IActionResult> Base64Tiff()
