@@ -17,21 +17,25 @@ namespace WebOcr.Controllers
     public class OcrController : ControllerBase
     {
         private readonly OcrService ocrService;
+        private readonly ManagementService managementService;
 
-        public OcrController(OcrService ocrService)
+        public OcrController(OcrService ocrService, ManagementService managementService)
         {
             this.ocrService = ocrService;
+            this.managementService = managementService;
         }
 
         // GET api/values
         [HttpPost]
-        public async Task<IActionResult> Tiff(String language = "eng", TessdataType quality = TessdataType.Normal)
+        public async Task<IActionResult> Tiff(String language = "English", TessdataType quality = TessdataType.Normal)
         {
             if (!Request.HasFormContentType)
                 return BadRequest("Content type has to be MultipartFormData");
             IFormCollection form = await Request.ReadFormAsync();
             if (form.Files.Count != 1)
                 return BadRequest("No file");
+
+            String traineddata = managementService.GetLanguageDataFileWithoutExtension(language) ?? "eng";
 
             byte[] bytes;
             using (MemoryStream ms = new MemoryStream())
@@ -45,7 +49,7 @@ namespace WebOcr.Controllers
 
             Stopwatch sw = new Stopwatch();
             sw.Start();
-            String normText = ocrService.Ocr(bytes, "deu", TessdataType.Fast);
+            String normText = ocrService.Ocr(bytes, traineddata, quality);
             sw.Stop();
             Console.WriteLine("OCR Duration: " + sw.ElapsedMilliseconds);
 

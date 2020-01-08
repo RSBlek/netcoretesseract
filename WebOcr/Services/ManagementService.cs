@@ -17,6 +17,22 @@ namespace WebOcr.Services
             this.tessdataService = tessdataService;
         }
 
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <returns>Returns null when language is not available. If language is available returns the name of the .traineddata file</returns>
+        public String GetLanguageDataFileWithoutExtension(String languageName)
+        {
+            Language language = TessdataLanguages.Get().FirstOrDefault(x => x.Name.Equals(languageName, StringComparison.OrdinalIgnoreCase));
+            if (languageName == null)
+                return null;
+            if (tessdataService.IsDataFileAvailable(language.File))
+                return Path.GetFileNameWithoutExtension(language.File);
+            else
+                return null;
+        }
+
         public List<String> GetAvailableLanguages()
         {
             List<String> languages = new List<String>();
