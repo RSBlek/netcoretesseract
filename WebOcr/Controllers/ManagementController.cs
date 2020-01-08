@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using WebOcr.Models;
 using WebOcr.Services;
 
 namespace WebOcr.Controllers
@@ -14,6 +15,17 @@ namespace WebOcr.Controllers
         public ManagementController(ManagementService managementService)
         {
             this.managementService = managementService;
+        }
+
+        [Route("/")]
+        public IActionResult Index()
+        {
+            WebTesseractStats stats = new WebTesseractStats()
+            {
+                Languages = managementService.GetAvailableLanguages(),
+                Qualities = Enum.GetNames(typeof(TessdataType)).ToList()
+            };
+            return Ok(stats);
         }
 
         public IActionResult Languages()
