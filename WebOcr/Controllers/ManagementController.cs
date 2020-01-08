@@ -20,5 +20,10 @@ namespace WebOcr.Controllers
         {
             return Ok(managementService.GetAvailableLanguages());
         }
+
+        public IActionResult Qualities()
+        {
+            return Ok(Enum.GetNames(typeof(TessdataType)).ToList());
+        }
     }
 }
