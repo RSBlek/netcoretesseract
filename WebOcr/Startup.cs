@@ -10,6 +10,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using WebOcr.Configuration;
+using WebOcr.Services;
 
 namespace WebOcr
 {
@@ -25,6 +27,10 @@ namespace WebOcr
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<TessdataPathConfiguration>(Configuration.GetSection("TessdataPaths"));
+            services.AddScoped<TessdataService>();
+            services.AddScoped<ManagementService>();
+            services.AddScoped<OcrService>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
